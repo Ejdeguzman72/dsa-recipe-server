@@ -3,6 +3,7 @@ package com.dsa.recipeserver.daoimpl;
 import com.dsa.recipeserver.dao.RecipeDao;
 import com.dsa.recipeserver.dto.RecipeDTO;
 import com.dsa.recipeserver.model.Recipe;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ import java.util.List;
 @Repository
 public class RecipeDaoImpl implements RecipeDao {
 
+    @Autowired
     JdbcTemplate jdbcTemplate;
 
     private static final String GET_ALL_RECIPES_SQL = "SELECT RECIPE_ID, NAME, INGREDIENTS, DIRECTIONS, RECIPE_TYPE_DESCR " +
