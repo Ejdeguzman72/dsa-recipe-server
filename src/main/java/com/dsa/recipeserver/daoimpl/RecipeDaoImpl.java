@@ -3,6 +3,7 @@ package com.dsa.recipeserver.daoimpl;
 import com.dsa.recipeserver.dao.RecipeDao;
 import com.dsa.recipeserver.dto.RecipeDTO;
 import com.dsa.recipeserver.model.Recipe;
+import com.dsa.recipeserver.model.RecipeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,6 +34,7 @@ public class RecipeDaoImpl implements RecipeDao {
     private static final String UPDATE_RECIPE_INFO_SQL = "UPDATE RECIPE SET NAME = ?, INGREDIENTS = ?, DIRECTIONS = ?, RECIPE_TYPE_ID = ? " +
             "WHERE RECIPE_ID = ?";
     private static final String DELETE_RECIPE_INFO_SQL = "DELETE FROM RECIPE WHERE RECIPE_ID = ?";
+    private static final String GET_ALL_RECIPE_TYPES_SQL = "SELECT RECIPE_TYPE_ID,DESCR FROM RECIPE_TYPE";
 
     @Override
     public List<RecipeDTO> getAllRecipes() {
@@ -114,5 +116,13 @@ public class RecipeDaoImpl implements RecipeDao {
         }
 
         return result;
+    }
+
+    @Override
+    public List<RecipeType> getAllRecipeTypes() {
+        List<RecipeType> list = new ArrayList<>();
+        list = jdbcTemplate.query(GET_ALL_RECIPE_TYPES_SQL, BeanPropertyRowMapper.newInstance(RecipeType.class));
+
+        return list;
     }
 }

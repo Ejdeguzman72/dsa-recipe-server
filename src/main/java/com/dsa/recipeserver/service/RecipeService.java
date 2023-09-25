@@ -4,6 +4,7 @@ import com.dsa.recipeserver.daoimpl.RecipeDaoImpl;
 import com.dsa.recipeserver.domain.*;
 import com.dsa.recipeserver.dto.RecipeDTO;
 import com.dsa.recipeserver.model.Recipe;
+import com.dsa.recipeserver.model.RecipeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +103,14 @@ public class RecipeService {
         if (count > 0) {
             response.setRecipe(recipe);
         }
+
+        return response;
+    }
+
+    public RecipeTypeListResponse getAllRecipeTypes() {
+        RecipeTypeListResponse response = new RecipeTypeListResponse();
+        List<RecipeType> list = recipeDaoImpl.getAllRecipeTypes();
+        response.setList(list);
 
         return response;
     }

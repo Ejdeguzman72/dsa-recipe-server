@@ -9,4 +9,5 @@ public class UriConstants {
     public static final String ADD_RECIPE_INFORMATION_URI = "/app/recipes/add";
     public static final String UPDATE_RECIPE_INFORMATON_URI = "/app/recipes/update/{recipeId}";
     public static final String DELETE_RECIPE_INFORMATION_URI = "/app/recipes/delete/{recipeId}";
+    public static final String GET_ALL_RECIPE_TYPES = "/app/recipe-types/all";
 }

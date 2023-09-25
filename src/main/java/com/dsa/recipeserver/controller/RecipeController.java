@@ -1,16 +1,12 @@
 package com.dsa.recipeserver.controller;
 
 import com.dsa.recipeserver.domain.*;
-import com.dsa.recipeserver.dto.RecipeDTO;
-import com.dsa.recipeserver.model.Recipe;
 import com.dsa.recipeserver.service.RecipeService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -86,8 +82,8 @@ public class RecipeController {
             @ApiResponse(code = 500, message = "Internal server error")})
     @PutMapping(value = UriConstants.UPDATE_RECIPE_INFORMATON_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public RecipeAddUpdateResponse updateRecipeInformation(RecipeAddUpdateRequest request) {
-        RecipeAddUpdateResponse response = recipeService.updateRecipeInformation(request);
+    public RecipeAddUpdateResponse updateRecipeInformation(long recipeId, RecipeAddUpdateRequest request) {
+        RecipeAddUpdateResponse response = recipeService.updateRecipeInformation(recipeId, request);
         return response;
     }
 
@@ -100,6 +96,18 @@ public class RecipeController {
     @CrossOrigin(origins = "*", maxAge = 3600)
     public RecipeSearchResponse deleteRecipeInformation(long recipeId) {
         RecipeSearchResponse response = recipeService.deleteRecipeInformation(recipeId);
+        return response;
+    }
+
+    @ApiOperation(value = "Get All Recipe Types")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Invalid"),
+            @ApiResponse(code = 500, message = "Internal server error")})
+    @DeleteMapping(value = UriConstants.GET_ALL_RECIPE_TYPES)
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    public RecipeTypeListResponse getAllRecipeTypes() {
+        RecipeTypeListResponse response = recipeService.getAllRecipeTypes();
         return response;
     }
 }
