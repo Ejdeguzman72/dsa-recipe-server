@@ -99,7 +99,7 @@ public class RecipeController {
     @DeleteMapping(value = UriConstants.DELETE_RECIPE_INFORMATION_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
     public RecipeSearchResponse deleteRecipeInformation(long recipeId) {
-        RecipeSearchResponse response = recipeService.updateRecipeInformation(recipeId);
+        RecipeSearchResponse response = recipeService.deleteRecipeInformation(recipeId);
         return response;
     }
 }
