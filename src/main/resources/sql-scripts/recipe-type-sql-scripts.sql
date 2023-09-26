@@ -1,2 +1,3 @@
-insert into recipe_type (descr)
-values ('American'),('Breakfeast'),('Brazillian'),('Comfort'),('Deserts'),('Filipino'),('HIspanic'),('Italian'),('Seafood'),('Slow Cooker'),('Asian');
+INSERT INTO public.recipe_type
+(descr)
+values ('Asian'),('American'),('Breakfeast'),('Brazillian'),('Comfort'),('Deserts'),('Filipino'),('HIspanic'),('Italian'),('Seafood'),('Slow Cooker');
