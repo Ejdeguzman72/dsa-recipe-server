@@ -104,7 +104,7 @@ public class RecipeController {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Invalid"),
             @ApiResponse(code = 500, message = "Internal server error")})
-    @DeleteMapping(value = UriConstants.GET_ALL_RECIPE_TYPES)
+    @GetMapping(value = UriConstants.GET_ALL_RECIPE_TYPES)
     @CrossOrigin(origins = "*", maxAge = 3600)
     public RecipeTypeListResponse getAllRecipeTypes() {
         RecipeTypeListResponse response = recipeService.getAllRecipeTypes();
