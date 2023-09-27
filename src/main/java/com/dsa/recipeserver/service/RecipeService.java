@@ -84,15 +84,12 @@ public class RecipeService {
     public RecipeAddUpdateResponse updateRecipeInformation(long recipeId, RecipeAddUpdateRequest request) {
         RecipeAddUpdateResponse response = new RecipeAddUpdateResponse();
         Recipe recipe = new Recipe();
-        try {
-            recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.error("Empty data set: " + e.toString());
-        }
+        recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
+
 
         int count = 0;
 
-        count = recipeDaoImpl.updateRecipeInformation(request.getRecipeId(), request);
+        count = recipeDaoImpl.updateRecipeInformation(recipeId, request);
         if (count > 0) {
             recipe.setName(request.getName());
             recipe.setIngredients(request.getIngredients());
