@@ -33,7 +33,6 @@ public class RecipeJpa {
     public void setName(String name) {
         this.name = name;
     }
-
     @Column(name = "ingredients")
     public String[] getIngredients() {
         return ingredients;
@@ -51,6 +50,7 @@ public class RecipeJpa {
     public void setDirections(String[] directions) {
         this.directions = directions;
     }
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_type_id")

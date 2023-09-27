@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class RecipeController {
@@ -34,7 +36,7 @@ public class RecipeController {
             @ApiResponse(code = 500, message = "Internal server error")})
     @GetMapping(value = UriConstants.GET_RECIPES_BY_TYPE_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public RecipeListResponse getAllRecipesByType(int recipeTypeId) {
+    public RecipeListResponse getAllRecipesByType(@PathVariable int recipeTypeId) {
         RecipeListResponse response = recipeService.getRecipesByType(recipeTypeId);
         return response;
     }
@@ -46,7 +48,7 @@ public class RecipeController {
             @ApiResponse(code = 500, message = "Internal server error")})
     @GetMapping(value = UriConstants.GET_RECIPE_BY_NAME_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public RecipeDTOSearchResponse getRecipeByName(String name) {
+    public RecipeDTOSearchResponse getRecipeByName(@PathVariable String name) {
         RecipeDTOSearchResponse response = recipeService.getRecipeByName(name);
         return response;
     }
@@ -58,7 +60,7 @@ public class RecipeController {
             @ApiResponse(code = 500, message = "Internal server error")})
     @GetMapping(value = UriConstants.GET_RECIPE_BY_ID_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public RecipeSearchResponse getRecipeById(long recipeId) {
+    public RecipeSearchResponse getRecipeById(@PathVariable long recipeId) {
         RecipeSearchResponse response = recipeService.getRecipeById(recipeId);
         return response;
     }
@@ -70,7 +72,7 @@ public class RecipeController {
             @ApiResponse(code = 500, message = "Internal server error")})
     @PostMapping(value = UriConstants.ADD_RECIPE_INFORMATION_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public RecipeAddUpdateResponse addRecipeInformation(RecipeAddUpdateRequest request) {
+    public RecipeAddUpdateResponse addRecipeInformation(@RequestBody @Valid RecipeAddUpdateRequest request) {
         RecipeAddUpdateResponse response = recipeService.addRecipeInformation(request);
         return response;
     }
@@ -82,7 +84,7 @@ public class RecipeController {
             @ApiResponse(code = 500, message = "Internal server error")})
     @PutMapping(value = UriConstants.UPDATE_RECIPE_INFORMATON_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public RecipeAddUpdateResponse updateRecipeInformation(long recipeId, RecipeAddUpdateRequest request) {
+    public RecipeAddUpdateResponse updateRecipeInformation(@PathVariable long recipeId, @RequestBody @Valid RecipeAddUpdateRequest request) {
         RecipeAddUpdateResponse response = recipeService.updateRecipeInformation(recipeId, request);
         return response;
     }
@@ -94,7 +96,7 @@ public class RecipeController {
             @ApiResponse(code = 500, message = "Internal server error")})
     @DeleteMapping(value = UriConstants.DELETE_RECIPE_INFORMATION_URI)
     @CrossOrigin(origins = "*", maxAge = 3600)
-    public RecipeSearchResponse deleteRecipeInformation(long recipeId) {
+    public RecipeSearchResponse deleteRecipeInformation(@PathVariable long recipeId) {
         RecipeSearchResponse response = recipeService.deleteRecipeInformation(recipeId);
         return response;
     }

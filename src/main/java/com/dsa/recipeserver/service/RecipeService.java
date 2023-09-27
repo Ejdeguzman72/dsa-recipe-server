@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.relational.core.mapping.Embedded;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,9 +53,14 @@ public class RecipeService {
 
     public RecipeSearchResponse getRecipeById(long recipeId) {
         RecipeSearchResponse response = new RecipeSearchResponse();
-        Recipe recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
-        response.setRecipe(recipe);
+        Recipe recipe = new Recipe();
+        try {
+            recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.error("Empty data set: " + e.toString());
+        }
 
+        response.setRecipe(recipe);
         return response;
     }
 
@@ -78,7 +84,12 @@ public class RecipeService {
     public RecipeAddUpdateResponse updateRecipeInformation(long recipeId, RecipeAddUpdateRequest request) {
         RecipeAddUpdateResponse response = new RecipeAddUpdateResponse();
         Recipe recipe = new Recipe();
-        recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
+        try {
+            recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.error("Empty data set: " + e.toString());
+        }
+
         int count = 0;
 
         count = recipeDaoImpl.updateRecipeInformation(request.getRecipeId(), request);
@@ -97,11 +108,16 @@ public class RecipeService {
         RecipeSearchResponse response = new RecipeSearchResponse();
         Recipe recipe = new Recipe();
         int count = 0;
-        recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
-        count = recipeDaoImpl.deleteRecipeInformation(recipeId);
 
-        if (count > 0) {
-            response.setRecipe(recipe);
+        try {
+            recipe = recipeDaoImpl.retrieveRecipeById(recipeId);
+            count = recipeDaoImpl.deleteRecipeInformation(recipeId);
+
+            if (count > 0) {
+                response.setRecipe(recipe);
+            }
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.error("Empty data set: " + e.toString());
         }
 
         return response;
