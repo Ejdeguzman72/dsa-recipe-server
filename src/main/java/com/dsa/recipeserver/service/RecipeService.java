@@ -1,18 +1,29 @@
 package com.dsa.recipeserver.service;
 
+import com.dsa.recipeserver.dao.RecipeJpaDao;
 import com.dsa.recipeserver.daoimpl.RecipeDaoImpl;
 import com.dsa.recipeserver.domain.*;
 import com.dsa.recipeserver.dto.RecipeDTO;
+import com.dsa.recipeserver.jpa.RecipeJpa;
 import com.dsa.recipeserver.model.Recipe;
 import com.dsa.recipeserver.model.RecipeType;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.relational.core.mapping.Embedded;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RecipeService {
@@ -20,6 +31,8 @@ public class RecipeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
     @Autowired
     private RecipeDaoImpl recipeDaoImpl;
+    @Autowired
+    private RecipeJpaDao recipeJpaDao;
 
     public RecipeListResponse getAllRecipeInfo() {
         RecipeListResponse response = new RecipeListResponse();
@@ -27,6 +40,34 @@ public class RecipeService {
         response.setList(list);
 
         return response;
+    }
+
+    public ResponseEntity<Map<String, Object>> getAllRecipesPagination(
+            @RequestParam(required = false) String name, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        try {
+            List<RecipeJpa> recipes = recipeJpaDao.findAll();
+            Pageable paging = PageRequest.of(page,size);
+            Page<RecipeJpa> pageRecipe = null;
+
+            if (name == null) {
+                pageRecipe = recipeJpaDao.findAll(paging);
+            } else {
+                // pageRecipe = recipeJpaDao.findRecipeContaining(name, paging);
+            }
+
+            recipes = pageRecipe.getContent();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("recipes", recipes);
+            response.put("currentPage", pageRecipe.getNumber());
+            response.put("totalItems",pageRecipe.getTotalElements());
+            response.put("totalPages", pageRecipe.getTotalPages());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Error mapping data to pages: " + e.toString());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public RecipeListResponse getRecipesByType(int recipeTypeId) {

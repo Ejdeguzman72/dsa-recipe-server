@@ -6,9 +6,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -27,6 +29,18 @@ public class RecipeController {
     public RecipeListResponse getAllRecipeInformation() {
         RecipeListResponse response = recipeService.getAllRecipeInfo();
         return response;
+    }
+
+    @ApiOperation(value = "Get All Recipe Information Pagination")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Invalid"),
+            @ApiResponse(code = 500, message = "Internal server error")})
+    @GetMapping(value = UriConstants.GET_ALL_RECIPES_PAGINATION_URI)
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    public ResponseEntity<Map<String, Object>> getAllRecipesPagination(
+            @RequestParam(required = false) String name, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return recipeService.getAllRecipesPagination(name,page,size);
     }
 
     @ApiOperation(value = "Get Recipes By Type")
