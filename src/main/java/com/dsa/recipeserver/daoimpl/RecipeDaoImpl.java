@@ -7,6 +7,8 @@ import com.dsa.recipeserver.mapper.RecipeMapper;
 import com.dsa.recipeserver.model.Recipe;
 import com.dsa.recipeserver.model.RecipeType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -42,6 +44,7 @@ public class RecipeDaoImpl implements RecipeDao {
     public RecipeMapper recipeMapper;
 
     @Override
+    @Cacheable(value = "recipeList")
     public List<RecipeDTO> getAllRecipes() {
         List<RecipeDTO> list = new ArrayList<>();
         list = jdbcTemplate.query(GET_ALL_RECIPES_SQL, new RecipeDTOMapper());
@@ -50,6 +53,7 @@ public class RecipeDaoImpl implements RecipeDao {
     }
 
     @Override
+    @Cacheable(value = "recipeList")
     public List<RecipeDTO> getRecipesByType(int recipeTypeId) {
         List<RecipeDTO> list = new ArrayList<>();
         list = jdbcTemplate.query(GET_RECIPES_BY_TYPE_SQL, new RecipeDTOMapper(), recipeTypeId);
@@ -66,6 +70,7 @@ public class RecipeDaoImpl implements RecipeDao {
     }
 
     @Override
+    @Cacheable(value = "recipeById", key="#recipeId")
     public Recipe retrieveRecipeById(long recipeId) {
         Recipe recipe = new Recipe();
         recipe = jdbcTemplate.queryForObject(GET_RECIPE_BY_ID_SQL, new RecipeMapper(), recipeId);
@@ -74,6 +79,7 @@ public class RecipeDaoImpl implements RecipeDao {
     }
 
     @Override
+    @CachePut(value = "recipeList")
     public int addRecipeInformation(Recipe recipe) {
         int result = 0;
         String name = recipe.getName();
@@ -89,6 +95,7 @@ public class RecipeDaoImpl implements RecipeDao {
     }
 
     @Override
+    @CachePut(value = "recipeById", key = "#recipeId")
     public int updateRecipeInformation(long recipeId, Recipe recipeDetails) {
         int result = 0;
         Recipe recipe = retrieveRecipeById(recipeId);
@@ -108,6 +115,7 @@ public class RecipeDaoImpl implements RecipeDao {
     }
 
     @Override
+    @CachePut(value = "recipeById", key = "#recipeId")
     public int deleteRecipeInformation(long recipeId) {
         int result = 0;
         if (recipeId > 0) {
