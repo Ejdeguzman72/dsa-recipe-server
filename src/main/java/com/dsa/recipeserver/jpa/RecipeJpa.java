@@ -33,7 +33,7 @@ public class RecipeJpa {
     public void setName(String name) {
         this.name = name;
     }
-    @Column(name = "ingredients", columnDefinition = "text", length = 1000)
+    @Column(name = "ingredients")
     public String[] getIngredients() {
         return ingredients;
     }
@@ -42,7 +42,7 @@ public class RecipeJpa {
         this.ingredients = ingredients;
     }
 
-    @Column(name = "directions", columnDefinition = "text", length = 1000)
+    @Column(name = "directions")
     public String[] getDirections() {
         return directions;
     }
